@@ -34,7 +34,7 @@ IPアドレス、プロトコル、ポート番号、通信結果などのフィ
 ## 1. IAMロールの作成
 IAMポリシーで「ポリシーの作成」を選択。
 
-![](/images/flow1.png =500x)
+![](/images/vpc-flowlogs/flow1.png =500x)
 
 ポリシーの作成でJSONタブを選択し、以下のポリシーを入力。
 もしくは、ビジュアルエディタでインラインポリシーを選択することも可能。
@@ -57,19 +57,19 @@ IAMポリシーで「ポリシーの作成」を選択。
   ]
 }   
 ```
-![](/images/flow2.png =500x)
+![](/images/vpc-flowlogs/flow2.png =500x)
 
 任意のタグを作成。
 
-![](/images/flow3.png =500x)
+![](/images/vpc-flowlogs/flow3.png =500x)
 
 作成したポリシーへ命名し、完成。
 
-![](/images/flow4.png =500x)
+![](/images/vpc-flowlogs/flow4.png =500x)
 
 IAMロールへ移動し、「ロールを作成」を選択。
 
-![](/images/flow5.png =500x)
+![](/images/vpc-flowlogs/flow5.png =500x)
 
 カスタム信頼ポリシーを選択し、以下のポリシーを入力。
 Conditionセクションで追加し、ログを発行するアカウントを指定。
@@ -97,35 +97,35 @@ ArnLikeは一旦ワイルドカードを使用し、フローログ設定後にI
     ]
 }
 ```
-![](/images/flow6.png =500x)
+![](/images/vpc-flowlogs/flow6.png =500x)
 
 前述で作成したポリシーを追加。
 
-![](/images/flow7.png =500x)
+![](/images/vpc-flowlogs/flow7.png =500x)
 
 作成したロールに命名し、完成。
 
-![](/images/flow8.png =500x)
+![](/images/vpc-flowlogs/flow8.png =500x)
 
 ## 2. CloudWatch Logsでロググループを作成
 
 CloudWatchのロググループへ移動し、「ロググループを作成」を選択。
 
-![](/images/flow9.png =500x)
+![](/images/vpc-flowlogs/flow9.png =500x)
 
 グループに命名し、任意の保持期間を選択。
 
-![](/images/flow10.png =500x)
+![](/images/vpc-flowlogs/flow10.png =500x)
 
 ロググループが完成。
 
-![](/images/flow11.png =500x)
+![](/images/vpc-flowlogs/flow11.png =500x)
 
 ## 3. VPCフローログの設定
 フローログを設定するVPCを選択。
 フローログタブを開き、「フローログを作成」を選択。
 
-![](/images/flow12.png =500x)
+![](/images/vpc-flowlogs/flow12.png =500x)
 以下の内容で設定。
 
 |設定項目|内容|
@@ -138,17 +138,17 @@ CloudWatchのロググループへ移動し、「ロググループを作成」�
 |IAMロール|前述のIAMロール。|
 |ログレコードの形式|デフォルトかカスタムを選択。カスタムは選択した順番がログに反映される。形式のプレビューで順番を確認可能。|
 
-![](/images/flow13.png =500x)
+![](/images/vpc-flowlogs/flow13.png =500x)
 
 VPCフローログが完成。
 
-![](/images/flow14.png =500x)
+![](/images/vpc-flowlogs/flow14.png =500x)
 
 ## 4. IAMロールの修正
 前述で作成したIAMロールの信頼関係タブを開き、「信頼ポリシーを編集」を選択。
 ArnLikeのワイルドカードを作成したフローログIDに差し替え。
 
-![](/images/flow15.png =500x)
+![](/images/vpc-flowlogs/flow15.png =500x)
 
 # フローログの閲覧
 フローログは、CloudWatchサービスのLogs Insightsを使用することで検索が可能。
@@ -157,7 +157,7 @@ ArnLikeのワイルドカードを作成したフローログIDに差し替え�
 
 __クエリ構文を用いて、ログを分析。個別のログを開くとフィールド名と値のセットで閲覧可能。__
 
-![](/images/Insight.png =500x)
+![](/images/vpc-flowlogs/Insight.png =500x)
 
 #### クエリ構文の例
 
@@ -183,7 +183,7 @@ fields @timestamp, @message　
 
 ## 構成図
 
-![](/images/flowlogs.drawio.png =500x)
+![](/images/vpc-flowlogs/flowlogs.drawio.png =500x)
 
 __セキュリティーグループ__
 
