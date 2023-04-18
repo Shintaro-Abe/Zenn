@@ -3,7 +3,7 @@ title: "Node.jsとAWS CLIのインストール"
 emoji: "🌰"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["AWS", "nodejs"]
-published: false
+published: true
 ---
 
 # Node.js
