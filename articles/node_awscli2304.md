@@ -508,3 +508,6 @@ aws s3 rb s3://abetesttest
 #結果
 remove_bucket: abetesttest
 ```
+# まとめ
+npmパッケージとAWS CLIは、ローカル環境で作業するのに欠かせないツール。
+コンソールとIDEそれぞれの利点があるので、上手に活用して仕事をhackしていきたい。
