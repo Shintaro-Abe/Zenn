@@ -308,7 +308,7 @@ resources:
         TopicName: cost-notification
         DisplayName: Cost notification
         Subscription: 
-          - Endpoint: colorfulrhythms927@icloud.com
+          - Endpoint: xxxxxxxxxxxxxx@icloud.com
             Protocol: email
 
     #SteoFunctionsのロググループ作成
@@ -406,7 +406,7 @@ resources:
         TopicName: cost-notification
         DisplayName: Cost notification
         Subscription: 
-          - Endpoint: colorfulrhythms927@icloud.com
+          - Endpoint: xxxxxxxxxxxxxx@icloud.com
             Protocol: email
     #SteoFunctionsのロググループ作成
     StepfunctionsLoggroup:
