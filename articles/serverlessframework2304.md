@@ -3,7 +3,7 @@ title: "Serverless Frameworkの基本的な使い方"
 emoji: "⛑️"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["AWS", "serverlessframewor"]
-published: false
+published: true
 ---
 # Serverless framework
 ## 概念
@@ -38,7 +38,7 @@ which serverless
 `serverless `コマンドは` sls `と省略可能。
 
 | コマンド| 役割|
-| ---|
+| :---| :--- |
 | serverless create<br>(sls create) | サービスの作成。|
 | --template (-t)| テンプレートの指定。ランタイムごとにテンプレートが用意されており、` aws-python3 `はPython3.9。<br>自動でserverless.ymlとhandlerファイルが生成されるが、後からランタイムの修正可能。|
 | --name (-n)|サービス名。|
@@ -50,8 +50,8 @@ serverless create --template aws-python3 --name abetest-service --path abetest
 サービスを作成すると、ディレクトリに必要なファイルを自動で生成。
 
 | ファイル名 | 役割 |
-| --- |
-| handler | テンプレートで指定したランライムで作成。Lambdaのソースコードを定義。 |
+| :---| :--- |
+| handler | テンプレートで指定したランライムで作成。Lambdaのソースコードを定義。|
 | .gitignore. | コミットの際に対象から外すファイルを指定。|
 
 ![](/images/serverlessframework/server1.png =500x)
@@ -70,7 +70,7 @@ serverless create --template aws-python3 --name abetest-service --path abetest
 ### 構成
 
 | セクション| 役割|
-| ---|
+| :---| :--- |
 | service | サービスの宣言。| 
 | frameworkVersion| バージョンの指定。|
 | provider| アカウントのセットアップ。<br> **name** ：使用するクラウドサービス。` .aws `ディレクトリの認証情報を参照。<br> **runtime** ：使用するプログラミング言語を指定。<br> **stage** ： デプロイする環境。デフォルトは` dev `<br> **region** ： デプロイするリージョン。デフォルトはus-east-1。<br> **profile** ： 認証情報を参照するユーザーの切り替え。<br> **memorySize** ：Lambdaで使用するメモリの指定。デフォルトは1024MB。|
@@ -157,13 +157,13 @@ serverless deploy
 ` .severless `ディレクトリを生成。
 
 | ファイル| 役割|
-| ---|
+| :---| :--- |
 | cloudformation-template-create-stack.json | アーティファクトを格納するS3をCloudFormationで作成するテンプレート。| 
 | cloudformation-template-update-stack.json| Cloudformationを使用してデプロイするスタックのテンプレート。|
 | serverless-state.json| CloudFormationのテンプレートへ変換するためのデータ。|
 | abetest.zip | ソースコードの圧縮ファイル。|
 
-![](/images/serverlessframework/server2.png =500x)
+![](/images/serverlessframework/server2.png =300x)
 
 Lambda関数を作成。
 関数名は、` サービス-ステージ-Lambdaの論理ID `を付与。
@@ -196,7 +196,8 @@ serverless remove
 ```
 
 ## StepFunctionsによるAWS請求額通知
-SAMURAI_ST_SHINTAROABE-31 の課題を StepFunctionsとServerless frameworkで構築。
+毎日12時にEventbridgeでAWSの請求額を取得するLambda関数を起動させ、SNSから通知メールを送信するシステム。
+Serverless Frameworkを使用するので、あえてStepFunctionsを使用して構築。
 
 ![](/images/serverlessframework/EventBridge.drawio.png =500x)
 
@@ -206,7 +207,7 @@ serverless stepfunctionsプラグインをインストール。
 ```
 sudo npm install --save-dev serverless-step-functions
 ```
-__serverless.yml part.1__
+#### serverless.yml 【part.1】
 
 * providerセクションにLambdaの実行ロールを定義。
 CloudWatch Logsのポリシーは自動的に付与。他にアタッチするポリシーを記述。
@@ -221,7 +222,7 @@ Serverlessframeworkの機能を活用した方が、テンプレートに記述�
 __自動で付与されるポリシー__
 
 | サービス | ポリシー|
-| --- |
+| :---| :--- |
 | Lambda |logs:CreateLogStream<br>logs:CreateLogGroup<br>logs:TagResource<br>logs:PutLogEvents|
 | StepFunctions | 実行に必要なポリシー。 |
 
@@ -340,7 +341,7 @@ resources:
                     - states:StartExecution
                   Resource: !GetAtt CostNotificationStateMachine.Arn
 ```
-__serverless.yml part.2__
+#### serverless.yml 【part.2】
 
 LambdaとStepfunctions以外のリソースをresourceセクションで作成。
 
@@ -522,8 +523,8 @@ resources:
             RoleArn: !GetAtt StepfunctionStartRole.Arn
 ```
 
-__cost.py__
-
+#### cost.py
+[Developers IO 藤井元貴さん作成のapp.py](https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml)を参考にさせていただきました。
 ```
 import boto3
 import os 
@@ -634,3 +635,6 @@ def get_message(total_billing, service_billings):
 
     return subject, '\n'.join(message)
 ```
+# まとめ
+LambdaやStepFunctionsはServerless Frameworkで定義すると、ロールやトリガーなどの管理がしやすい。
+様々なプラグインを試してみて、開発の引き出しを増やしていきたい。
