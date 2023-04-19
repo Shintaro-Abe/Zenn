@@ -5,9 +5,9 @@ type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["AWS", "serverlessframewor"]
 published: true
 ---
-# Serverless framework
+# Serverless Framework
 ## 概念
-Serverless frameworkは、LambdaをメインとするインフラリソースをデプロイするためのCLI。
+Serverless Frameworkは、LambdaをメインとするインフラリソースをデプロイするためのCLI。
 functionsセクションを利用し、Lambda本体とLambdaがトリガーをするイベントを定義。
 resourceセクションでは、CloudFormationの構文を利用してインフラを定義。
 デプロイはCloudFormationを使用して行われるため、デプロイイベントをCloudFormationのコンソール画面で確認可能。
@@ -217,7 +217,7 @@ stepFunctionsセクションで作成すると、実行に必要なポリシー�
 EventBridgeが使用するロールはresourceセクションで定義が必要。
 ロググループはresourceセクションで定義が必要。stepFunctionsセクションで関連付けを行うと、必要なポリシーを自動でアタッチ。
 
-Serverlessframeworkの機能を活用した方が、テンプレートに記述する量が少ない。
+Serverless Frameworkの機能を活用した方が、テンプレートに記述する量が少ない。
 
 __自動で付与されるポリシー__
 
@@ -343,7 +343,7 @@ resources:
 ```
 #### serverless.yml 【part.2】
 
-LambdaとStepfunctions以外のリソースをresourceセクションで作成。
+LambdaとStepFunctions以外のリソースをresourceセクションで作成。
 
 ```
 service: abetest
