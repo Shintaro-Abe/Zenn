@@ -96,7 +96,7 @@ cat ~/.gitconfig
         st = status --short
 [user]
         name = Shintaro Abe
-        email = 121922274+Shintaro-Abe@users.noreply.github.com
+        email = 1234567890+Shintaro-Abe@users.noreply.github.com
 [init]
         defaultBranch = main
 [secrets]
