@@ -3,7 +3,7 @@ title: "CodeCommitとローカル環境の連携 【AWS Code Family Plactice 1/9
 emoji: "🪺"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["aws", "codecommit","git"]
-published: true
+published: false
 ---
 
 # 開発手法について
