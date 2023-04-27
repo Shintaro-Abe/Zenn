@@ -2,7 +2,7 @@
 title: "AWS CodeCommitとローカル環境の連携 【CodeFamily Practices 1/7】" 
 emoji: "🪺"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["aws", "codecommit","git"]
+topics: ["aws", "codecommit","git", "cicd", "devops", "agile"]
 published: true
 ---
 
