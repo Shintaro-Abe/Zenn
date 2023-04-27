@@ -16,6 +16,12 @@ npx zenn preview
 ```
 http://localhost:8000
 ```
+
+**Zenn CLIのアップデート**
+```
+sudo npm install zenn-cli@latest
+```
+
 ## topicsの表記
 **Node.js**
 ```
