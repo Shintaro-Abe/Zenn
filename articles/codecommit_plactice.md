@@ -91,7 +91,7 @@ CodeCommitコンソールにあるリポジトリを作成を選択。
 
 ![](/images/codecommit_plactice/cc11.png =500x)
 
-##　ローカル操作
+## ローカル操作
 * Codecommit用のディレクトリを作成し、Gitの初期化を実行。
 
 ```
