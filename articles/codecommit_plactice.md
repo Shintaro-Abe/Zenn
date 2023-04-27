@@ -1,9 +1,9 @@
 ---
-title: "CodeCommitとローカル環境の連携 【AWS Code Family Plactice 1/9】" 
+title: "AWS CodeCommitとローカル環境の連携 【CodeFamily Practices 1/7】" 
 emoji: "🪺"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["aws", "codecommit","git"]
-published: false
+published: true
 ---
 
 # 開発手法について
@@ -38,58 +38,58 @@ IAMでHTTPS接続とGit認証情報を使用し、ユーザー名とパスワー
 他のAWSサービスと統合が可能で、Cloud9でコードの作成とコミットを行い、EventBridgeでリポジトリの変更をトリガー、CodePipelineがコードを読み取りビルドとデプロイを実行。
 
 | 用語 |意味 |
-| --- |
+| --- | ---|
 | ソースコントロール | 開発プロセスにおける要素。 <br>ソースコード管理システムを使用してコードの変更を履歴として残し、必要に応じて過去のバージョンに戻すことが可能。 <br>開発者ごとに作業を切り離したり、コードのレビューと承認作業を行い反映させることが可能。<br>個人、もしくはチームに関わらず、コードを一元化して管理することで開発を効率化。<br>Gitはその代表的なシステム。|
 
-#CodeCommitの開始方法
-##AWS CodeCommit の HTTPS Git 認証情報
+# CodeCommitの開始方法
+## AWS CodeCommit の HTTPS Git 認証情報
 IAMのセキュリティー認証情報を選択。
 
-![image][cc1.png]
+![](/images/codecommit_plactice/cc1.png =500x)
 
 HTTTPSのGit認証情報を生成をクリック。
 
-![image][cc2.png]
+![](/images/codecommit_plactice/cc2.png =500x)
 
 認証情報のCSVをダウンロード。
 
-![image][cc3.png]
+![](/images/codecommit_plactice/cc3.png =500x)
 
 IAMに認証情報が登録される。
 
-![image][cc4.png]
+![](/images/codecommit_plactice/cc4.png =500x)
 
 ## VSCodeの設定
 
 ローカル環境で初めてクローンを作成する場合、Git認証を求められる。
 
-![image][cc8.png]
+![](/images/codecommit_plactice/cc8.png =500x)
 
 IAMで取得したユーザネームの情報を入力。
 
-![image][cc9.png]
+![](/images/codecommit_plactice/cc9.png =500x)
 
 Git認証のパスワードを入力。
 
-![image][cc10.png]
+![](/images/codecommit_plactice/cc10.png =500x)
 
 
 ## Codecommitコンソール操作
 CodeCommitコンソールにあるリポジトリを作成を選択。
 
-![image][cc5.png]
+![](/images/codecommit_plactice/cc5.png =500x)
 
 リポジトリ名と説明を入力。
 
-![image][cc6.png]
+![](/images/codecommit_plactice/cc6.png =500x)
 
 ローカルにリポジトリのクローンを作成するため、コマンドをコピー。
 
-![image][cc7.png]
+![](/images/codecommit_plactice/cc7.png =500x)
 
 コンソール画面に戻り、リポジトリを確認。
 
-![image][cc11.png]
+![](/images/codecommit_plactice/cc11.png =500x)
 
 ##ローカル操作
 * Codecommit用のディレクトリを作成し、Gitの初期化を実行。
@@ -126,15 +126,15 @@ git push
 
 CodeCommitのリポジトリにファイルがアップロードされる。
 
-![image][cc12.png]
+![](/images/codecommit_plactice/cc12.png =500x)
 
 コミットの履歴はコミットページから確認可能。
 
-![image][cc13.png]
+![](/images/codecommit_plactice/cc13.png =500x)
 
 ブランチはブランチページより確認可能。
 
-![image][cc14.png]
+![](/images/codecommit_plactice/cc14.png =500x)
 
 * リポジトリの削除(CLI)
 
@@ -144,14 +144,14 @@ aws codecommit delete-repository --repository-name abetest
 * リポジトリの作成(CLI)
 
 ```
-aws codecommit create-repository --repository-name hogepiyo \
---repository-description "hogehogepiyopiyo" \
+aws codecommit create-repository --repository-name abetest \
+--repository-description "my repository" \
 --tags Team=abetest
 ```
 結果
 
 ```
-REPOSITORYMETADATA      arn:aws:codecommit:ap-northeast-1:417338593075:hogepiyo 417338593075    https://git-codecommit.ap-northeast-1.amazonaws.com/v1/repos/hogepiyo        ssh://git-codecommit.ap-northeast-1.amazonaws.com/v1/repos/hogepiyo     2023-02-22T04:19:12.706000+09:00        2023-02-22T04:19:12.706000+09:00     hogehogepiyopiyo        8a5e5bfc-7057-45fc-ae9c-73f535fd6414    hogepiyo
+REPOSITORYMETADATA      arn:aws:codecommit:ap-northeast-1:123456789012:abetest 123456789012    https://git-codecommit.ap-northeast-1.amazonaws.com/v1/repos/abetest        ssh://git-codecommit.ap-northeast-1.amazonaws.com/v1/repos/abetest     2023-02-22T04:19:12.706000+09:00        2023-02-22T04:19:12.706000+09:00     my repository        8a5e5bfc-7057-45fc-ae9c-73f535fd6414    abetest
 ```
 ## 共有リポジトリの作成
 * リポジトリの作成は基本的に同じ。
@@ -165,7 +165,7 @@ git clone https://git-codecommit.ap-northeast-1.amazonaws.com/v1/repos/abetest s
 
 クローンを作成すると、リポジトリの最新情報を取得。
 
-![image][cc15.png]
+![](/images/codecommit_plactice/cc15.png =300x)
 
 * Codecommitリポジトリから最新情報を受け取る。
 
@@ -180,7 +180,7 @@ git push
 
 例)  lambda-condition.ymlをCodeCommitリポジトリに追加。
 
-![image][cc16.png]
+![](/images/codecommit_plactice/cc16.png =300x)
 
 片方のリポジトリへ移動し、CodeCommitリポジトリの最新情報を取得。
 
@@ -190,7 +190,7 @@ git pull
 
 例)  shareリポジトリからpushしたlambda-codition.ymlがabetestリポジトリへ反映された。
 
-![image][cc17.png]
+![](/images/codecommit_plactice/cc17.png =300x)
 
 ## ブランチの作成
 
@@ -201,7 +201,7 @@ git log
 
 ```
 commit 3e9eba5c9a8c7c18dbc691f3776c59e8dee9a9b2 (HEAD -> main, origin/main)
-Author: Shintaro Abe <121922274+Shintaro-Abe@users.noreply.github.com>
+Author: Shintaro Abe <123456789+Shintaro-Abe@users.noreply.github.com>
 Date:   Wed Feb 22 05:05:03 2023 +0900
 
     sns.yml
@@ -283,12 +283,16 @@ Your branch is up to date with 'origin/main'.
 
 コミットごとに、作成者やバージョンのリンクを表示。
 
-![image][cc18.png]
+![](/images/codecommit_plactice/cc18.png =500x)
 
 コミットIDをクリックすると、バージョンの内容を確認可能
 
-![image][cc19.png]
+![](/images/codecommit_plactice/cc19.png =500x)
 
 ブランチページで現在使用しているブランチを確認可能。
 
-![image][cc20.png]
+![](/images/codecommit_plactice/cc20.png =500x)
+
+# まとめ
+CI/CDのプロセスでリポジトリの役割を担うCodeCommit。
+今回はVSCodeからのpushを行ったが、Cloud9との連携も試して各ツールの利点などを掘り下げていきたい。
