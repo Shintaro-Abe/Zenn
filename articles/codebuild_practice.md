@@ -1,9 +1,9 @@
 ---
-title: "CodeBuildのビルドプロジェクトを作ってみよう 【CodeFamily Practices 2/7】"
+title: "CodeBuildでビルドプロジェクトを作ってみよう 【CodeFamily Practices 2/7】"
 emoji: "🏗️"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["aws", "codebuild", "cicd", "devops"]
-published: false
+published: true
 ---
 # CodeBuildの概念
 マネージド型のビルドサービス。GitとDockerを使用してビルドを実施。ピーク時のリクエストに合わせて自動でスケーリングするため、ビルドサーバーの管理は不要。データの保管、転送、アーティファクトをデフォルトで暗号化。
@@ -33,7 +33,7 @@ EventBridgeでは、コードのコミットなどのルールかcron式でス�
 | BitBucket | ATLASSIAN社のCI/CDツールで、Gitベースのリポジトリ。Bitbucket Pipesでパイプラインを構築。<br>DevSecOpsツールを使用してCI/CDを実施。<br>ソースコードのコミットID、ブランチを指定。|
 
 ## ビルド環境
-ビルドを実行するためのOSとプログラミング言語のランタイムを組み合わせた、CodeBuild Dockerイメージリポジトリを作成(マネージド型イメージ)。Docker Hub、Amazon ECRリポジトリに保存されているどっかイメージを使用することも可能(カスタムイメージ)。
+ビルドを実行するためのOSとプログラミング言語のランタイムを組み合わせた、CodeBuild Dockerイメージリポジトリを作成(マネージド型イメージ)。Docker Hub、Amazon ECRリポジトリに保存されているDockerイメージを使用することも可能(カスタムイメージ)。
 ### [Dockerイメージ](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-available.html)
 CodeBuild Dockerイメージリポジトリは大まかにAmazon Linux2、Ubuntu、Windows Server Coreをサポート。
 
@@ -139,7 +139,7 @@ artifacts:
 キャッシュを用いることで、ビルドの実行時間を短縮。
 
 | キャッシュの種類| 概要|
-| --- |
+| --- | ---|
 | ソースキャッシュ|Gitのメタデータをキャッシュ。<br>キャッシュをした後に再度ビルドを行った場合は、コミット間の変更のみPullされる仕組み。|
 | Dockerレイヤーキャッシュ | Dockerのレイヤーをキャッシュ。Linux環境のみ使用可能。 |
 | カスタムキャッシュ | 上記に該当しないキャッシュ。 |
@@ -153,13 +153,13 @@ artifacts:
 
 CodeBuildコンソールの「ビルドプロジェクトを作成する」を選択。
 
-![image][cb1.png]
+![](/images/codebuild_practice/cb1.png =500x)
 
 | 項目| 概要|
 | --- | ---|
 | プロジェクトの設定| プロジェクト名の入力。 ビルド結果を表示するバッジや同時ビルド制限の有効化を設定。|
 | ソース | 使用するプロバイダーとリポジトリ、参照するブランチやコミットIDを指定。バージョンの最新履歴からクローンの深さを指定することもできる。他のGitリポジトリを組み込むGitサブモジュールを有効化できる。|
-| 環境 | CodeBuildによって管理されたマネージド型イメージもしくはDockerイメージを指定したLinuxのOS環境環境で使用。<br>OSは複数のバージョンから選択可能。<br>CodeBuildがビルドを行うためのサービスロールを指定。|
+| 環境 | CodeBuildによって管理されたマネージド型イメージもしくはDockerイメージを指定したLinuxのOS環境環境で使用。<br>OSは複数のバージョンから選択可能。<br>CodeBuildがビルドを行うためのサービスロールを指定。<br>サービスロールにはビルド実行に必要なポリシーをあらかじめアタッチしておく。|
 | Buildspec |参照するbuildspec.ymlを指定。もしくはビルドコマンドを直接入力。 |
 | バッチ設定 | バッチビルドを行う場合に設定。<br>コンピューティングタイプ、ビルド数の制限、タイムアウトなどビルドに関する設定。<br>アーティファクト、レポートなど出力に関する設定を行う。|
 | アーティファクト | アーティファクトとキャッシュの出力先を設定。アーティファクトの出力先はS3のみ。キャッシュはS3かローカルを選択。|
@@ -167,7 +167,7 @@ CodeBuildコンソールの「ビルドプロジェクトを作成する」を�
 
 バッチを有効化にしバッチのURLコピー。
 
-![image][cb6.png]
+![](/images/codebuild_practice/cb6.png =500x)
 
 リポジトリにマークダウンファイルを作成し、リンクを挿入。
 
@@ -176,7 +176,7 @@ CodeBuildコンソールの「ビルドプロジェクトを作成する」を�
 ```
 ビルドの結果をバッジで表示。
 
-![image][cb7.png]
+![](/images/codebuild_practice/cb7.png =500x)
 
 以下のシンプルな設定内容を入力。
 ビルドプロジェクトの作成後、「ビルドの開始」を選択するとビルドを開始。
@@ -189,8 +189,8 @@ CodeBuildコンソールの「ビルドプロジェクトを作成する」を�
 | アーティファクト |  **タイプ**：CodeCommit<br>  **バケット名**：api-serverless<br>  **セマンティックバージョニングの有効化**：有効<br> **パス** ：指定なし<br>  **暗号化キー**：デフォルト(AWS管理キー)<br>  **キャッシュタイプ**：S3<br>  **キャッシュバケット**：abetest-cache  |
 | ログ |  CloudWatch Logs|
 
-![image][cb2.png]
-![image][cb3.png]
+![](/images/codebuild_practice/cb2.png =500x)
+![](/images/codebuild_practice/cb3.png =500x)
 
 * __buildspec.ymlのアーティファクトセクション__
 
@@ -207,7 +207,7 @@ artifacts:
 
 指定したバケットにアーティファクト格納。
 
-![image][cb4.png]
+![](/images/codebuild_practice/cb4.png =500x)
 
 * __buildspec.ymlのキャッシュセクション__
 
@@ -218,4 +218,8 @@ cache:
 ```
 指定したパケットにキャッシュを格納。
 
-![image][cb5.png]
+![](/images/codebuild_practice/cb5.png =500x)
+
+# まとめ
+今回は基本的な使い方のみの習得。
+今後は単体テストやバッチビルドなどにトライし、CI/CDツールとして活用できるようにしたい。
