@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Shintaro-Abe/Zenn#readme",
   "dependencies": {
-    "zenn-cli": "^0.1.142"
+    "zenn-cli": "^0.1.143",
+    "zenn-markdown-html": "^0.1.143"
   }
 }
