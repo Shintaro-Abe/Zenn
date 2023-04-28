@@ -45,51 +45,51 @@ IAMでHTTPS接続とGit認証情報を使用し、ユーザー名とパスワー
 ## AWS CodeCommit の HTTPS Git 認証情報
 IAMのセキュリティー認証情報を選択。
 
-![](/images/codecommit_plactice/cc1.png =500x)
+![](/images/codecommit_practice/cc1.png =500x)
 
 HTTTPSのGit認証情報を生成をクリック。
 
-![](/images/codecommit_plactice/cc2.png =500x)
+![](/images/codecommit_practice/cc2.png =500x)
 
 認証情報のCSVをダウンロード。
 
-![](/images/codecommit_plactice/cc3.png =500x)
+![](/images/codecommit_practice/cc3.png =500x)
 
 IAMに認証情報が登録される。
 
-![](/images/codecommit_plactice/cc4.png =500x)
+![](/images/codecommit_practice/cc4.png =500x)
 
 ## VSCodeの設定
 
 ローカル環境で初めてクローンを作成する場合、Git認証を求められる。
 
-![](/images/codecommit_plactice/cc8.png =500x)
+![](/images/codecommit_practice/cc8.png =500x)
 
 IAMで取得したユーザネームの情報を入力。
 
-![](/images/codecommit_plactice/cc9.png =500x)
+![](/images/codecommit_practice/cc9.png =500x)
 
 Git認証のパスワードを入力。
 
-![](/images/codecommit_plactice/cc10.png =500x)
+![](/images/codecommit_practice/cc10.png =500x)
 
 
 ## Codecommitコンソール操作
 CodeCommitコンソールにあるリポジトリを作成を選択。
 
-![](/images/codecommit_plactice/cc5.png =500x)
+![](/images/codecommit_practice/cc5.png =500x)
 
 リポジトリ名と説明を入力。
 
-![](/images/codecommit_plactice/cc6.png =500x)
+![](/images/codecommit_practice/cc6.png =500x)
 
 ローカルにリポジトリのクローンを作成するため、コマンドをコピー。
 
-![](/images/codecommit_plactice/cc7.png =500x)
+![](/images/codecommit_practice/cc7.png =500x)
 
 コンソール画面に戻り、リポジトリを確認。
 
-![](/images/codecommit_plactice/cc11.png =500x)
+![](/images/codecommit_practice/cc11.png =500x)
 
 ## ローカル操作
 * Codecommit用のディレクトリを作成し、Gitの初期化を実行。
@@ -126,15 +126,15 @@ git push
 
 CodeCommitのリポジトリにファイルがアップロードされる。
 
-![](/images/codecommit_plactice/cc12.png =500x)
+![](/images/codecommit_practice/cc12.png =500x)
 
 コミットの履歴はコミットページから確認可能。
 
-![](/images/codecommit_plactice/cc13.png =500x)
+![](/images/codecommit_practice/cc13.png =500x)
 
 ブランチはブランチページより確認可能。
 
-![](/images/codecommit_plactice/cc14.png =500x)
+![](/images/codecommit_practice/cc14.png =500x)
 
 * リポジトリの削除(CLI)
 
@@ -165,7 +165,7 @@ git clone https://git-codecommit.ap-northeast-1.amazonaws.com/v1/repos/abetest s
 
 クローンを作成すると、リポジトリの最新情報を取得。
 
-![](/images/codecommit_plactice/cc15.png =300x)
+![](/images/codecommit_practice/cc15.png =300x)
 
 * Codecommitリポジトリから最新情報を受け取る。
 
@@ -180,7 +180,7 @@ git push
 
 例)  lambda-condition.ymlをCodeCommitリポジトリに追加。
 
-![](/images/codecommit_plactice/cc16.png =300x)
+![](/images/codecommit_practice/cc16.png =300x)
 
 片方のリポジトリへ移動し、CodeCommitリポジトリの最新情報を取得。
 
@@ -190,7 +190,7 @@ git pull
 
 例)  shareリポジトリからpushしたlambda-codition.ymlがabetestリポジトリへ反映された。
 
-![](/images/codecommit_plactice/cc17.png =300x)
+![](/images/codecommit_practice/cc17.png =300x)
 
 ## ブランチの作成
 
@@ -283,15 +283,15 @@ Your branch is up to date with 'origin/main'.
 
 コミットごとに、作成者やバージョンのリンクを表示。
 
-![](/images/codecommit_plactice/cc18.png =500x)
+![](/images/codecommit_practice/cc18.png =500x)
 
 コミットIDをクリックすると、バージョンの内容を確認可能
 
-![](/images/codecommit_plactice/cc19.png =500x)
+![](/images/codecommit_practice/cc19.png =500x)
 
 ブランチページで現在使用しているブランチを確認可能。
 
-![](/images/codecommit_plactice/cc20.png =500x)
+![](/images/codecommit_practice/cc20.png =500x)
 
 # まとめ
 CI/CDのプロセスでリポジトリの役割を担うCodeCommit。
