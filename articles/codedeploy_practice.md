@@ -1,9 +1,9 @@
 ---
-title: ""
-emoji: "💬"
+title: "CodeDeployでEC2にアプリケーションをデプロイ 【CodeFamily Practices 3/7】"
+emoji: "🎯"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: []
-published: false
+topics: ["aws", "codedeploy", "cicd", "devops"]
+published: true
 ---
 # 概念
 EC2、オンプレミス、Lambda、ECSへのアプリケーションのデプロイを自動化するサービス。
@@ -25,7 +25,7 @@ CodeDeployがデプロイ中に使用するルール、成功条件、失敗条�
 インプレースとBlue/Greenで条件が異なる。
 
 | デプロイ設定 | インプレース | Blue/Green|
-| --- | --- |
+| --- | --- | --- |
 | CodeDeployDefault.AllAtOnce | 一度にできる限り多くのインスタンスへデプロイ。<br>1つでもデプロイできると成功。| 一度にできる限り多くのインスタンスへデプロイ。<br>すべてのインスタンスへルーティングし、一つでも正常に再ルーティングできれば成功。|
 | CodeDeployDefault.HalfAtATime | 一度に最大で半分のインスタンスへデプロイ。<br>少なくとも半分デプロイできると成功。 | 一度に最大で半分のインスタンスへデプロイ。<br>一度に最大半分のインスタンスへルーティングし、少なくとも半分のインスタンスへ再ルーティングできれば成功。|
 | CodeDeployDefault.OneAtATime | 一度に一つのインスタンスへデプロイ。<br>すべてのインスタンスへデプロイできると成功。|一度に一つのインスタンスへデプロイ。<br>一度に一つのインスタンスへトラフィックをルーティングし、すべてのインスタンスへ再ルーティングできると成功。 |
@@ -221,7 +221,6 @@ AWSCodeDeployRoleポリシーはデフォルトでアタッチ済み。
 | IAM instance profile | 前述で作成したEC2用サービスロール |
 
 ![](/images/codedeploy_practice/cdtut10.png =500x)
-
 ![](/images/codedeploy_practice/cdtut9.png =500x)
 
 ## リビジョンの作成
@@ -315,3 +314,7 @@ CodeDeployのコンソール画面から「アプリケーションの作成」�
 EC2へアクセスし、アプリケーションのインストールを確認。
 
 ![](/images/codedeploy_practice/cdtut20.png =500x)
+
+# まとめ
+EC2へアプリケーションをインストールする、シンプルなデプロイを習得。
+appspec.ymlについて掘り下げなかったので、LambdaやECSのデプロイ時にライフサイクルイベントなどをトライしてみたい。
