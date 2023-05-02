@@ -90,153 +90,26 @@ __メール__
 
 # コード
 __対応するコードはGitHubに公開しています！__
-https://github.com/Shintaro-Abe/codefamily-cloudformation
+
+https://github.com/Shintaro-Abe/codefamily-cloudformation.git
 
 ## Lambda
 SNSと連携し、サブスクリプションにメールを送るPythonソースコード。
 
 * __sns.py__
 
-```
-import json
-import os
-import boto3
+https://github.com/Shintaro-Abe/codefamily-cloudformation/blob/9714081ca098bce9fe6ffb2c416013d46224cbe5/sources/sns.py
 
-snscli = boto3.client('sns')
-
-def lambda_handler(event, context):
-    Body = json.loads(event['body'])
-    Sub = Body["sub"]
-    Mes = Body["mes"]
-    
-    response = snscli.publish(
-        TopicArn = os.environ["topic"],
-        Subject = Sub,
-        Message = Mes)
-    print(response)
-    
-    text = "Subject: " + Sub + " Message: " + Mes
-    return {
-        'statusCode': 200,
-        'body': text
-    }
-```
 ## CloudFormation(SAM)
 
 * __api-sns.yml__
 
-```
-AWSTemplateFormatVersion: '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
-Description: Sending emails from SNS with Lambda.
-Parameters:
-  LambdaFunctionName:
-    Type: String
-    Default: Api-Lambda-CloudFormation
-Resources:
-  #SNSの作成
-  ApiSns:
-    Type: AWS::SNS::Topic
-    Properties: 
-      TopicName: api-notification
-      DisplayName: Notification
-      Subscription: 
-        - Endpoint: zennzennzenn-SE@gmail.com
-          Protocol: email
-  #Lambdaの実行ロール
-  LambdaRole:
-    Type: 'AWS::IAM::Role'
-    Properties:
-      RoleName: api-sns
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - 'sts:AssumeRole'
-      Path: /
-      Policies:
-        - PolicyName: lambda-logging
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogGroup
-                Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*  
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                Resource: !Join 
-                - ''
-                - - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/
-                  - !Ref LambdaFunctionName
-                  - :*
-        - PolicyName: lambda-sns
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action: 
-                  - sns:Publish
-                Resource:
-                  - !GetAtt ApiSns.TopicArn
-  #APIGatewayの作成
-  ApiGatewayApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      EndpointConfiguration: 
-        Type: REGIONAL
-      StageName: prod
-      #ホストゾーンとACM証明書はすでに存在するリソースを使用
-      Domain: 
-        DomainName: Your-domain-name
-        CertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/z26y25x24w23v22u21
-        Route53:
-          HostedZoneId: 1a2b3c4d5e6f7g
-  #Lambdaの作成
-  ApiFunction: 
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Ref LambdaFunctionName
-      Events:
-        ApiEvent:
-          Type: Api
-          Properties:
-            Path: /
-            Method: any
-            RestApiId:
-              Ref: ApiGatewayApi
-      Runtime: python3.9
-      Handler: sns.handler
-      Environment: 
-        Variables:
-          topic: !GetAtt ApiSns.TopicArn
-      CodeUri: sns.py
-      Role: !GetAtt LambdaRole.Arn
-```
+https://github.com/Shintaro-Abe/codefamily-cloudformation/blob/9714081ca098bce9fe6ffb2c416013d46224cbe5/sources/api-sns.yml
+
 * __buildspec.yml__
 
-```
-version: 0.2
+https://github.com/Shintaro-Abe/codefamily-cloudformation/blob/9714081ca098bce9fe6ffb2c416013d46224cbe5/sources/buildspec.yml
 
-phases:
-
-  build:
-    commands:
-      - aws cloudformation package 
-        --template api-sns.yml 
-        --s3-bucket layers-bucket123456789        #パッケージを格納するS3バケットを指定
-        --output-template-file packaged-api-sns.yml
-      - aws cloudformation deploy 
-        --template-file packaged-api-sns.yml 
-        --stack-name Serverless 
-        --capabilities CAPABILITY_NAMED_IAM       #作成したロールを使用する場合は_NAMED_が必要
-```
 ## パイプラインの構築
 __ソースステージとビルドステージの二つを持つパイプラインを作成。__
 
