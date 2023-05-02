@@ -201,6 +201,10 @@ Serverless Frameworkを使用するので、あえてStepFunctionsを使用し�
 
 ![](/images/serverlessframework/EventBridge.drawio.png =500x)
 
+__対応するコードはGitHubに公開しています！__
+
+https://github.com/Shintaro-Abe/serverless-practice.git
+
 serverless stepfunctionsプラグインをインストール。
 尚、resourceセクションにCloudFormation構文で記述する方法でも作成可能。
 
