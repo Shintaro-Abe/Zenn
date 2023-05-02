@@ -707,7 +707,7 @@ resource "aws_scheduler_schedule" "cost_eventbridge" {
 }
 ```
 * __cost.py__
-[Developers IO 藤井元貴さん作成のapp.py](https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml)を参考にさせていただきました。
+[Developers IO 藤井元貴さん作成のapp.py](https://dev.classmethod.jp/articles/notify-slack-aws-billing/)を参考にさせていただきました。
 ```
 import boto3
 import os 
