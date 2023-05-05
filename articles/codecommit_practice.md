@@ -297,7 +297,7 @@ Your branch is up to date with 'origin/main'.
 CI/CDのプロセスでリポジトリの役割を担うCodeCommit。
 今回はVSCodeからのpushを行ったが、Cloud9との連携も試して各ツールの利点などを掘り下げていきたい。
 
-# CodeFamily Practicesの記事
+# 合わせて読みたい👀👉CodeFamily Practicesの記事
 
 :::details CodeBuildでビルドプロジェクトを作ってみよう 【CodeFamily Practices 2/7】
 https://zenn.dev/lifewithpiano/articles/codebuild_practice

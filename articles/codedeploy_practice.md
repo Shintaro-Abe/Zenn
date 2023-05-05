@@ -319,7 +319,7 @@ EC2へアクセスし、アプリケーションのインストールを確認�
 EC2へアプリケーションをインストールする、シンプルなデプロイを習得。
 appspec.ymlについて掘り下げなかったので、LambdaやECSのデプロイ時にライフサイクルイベントなどをトライしてみたい。
 
-# CodeFamily Practicesの記事
+# 合わせて読みたい👀👉CodeFamily Practicesの記事
 
 :::details CodeCommitとローカル環境の連携 【CodeFamily Practices 1/7】
 https://zenn.dev/lifewithpiano/articles/codecommit_practice

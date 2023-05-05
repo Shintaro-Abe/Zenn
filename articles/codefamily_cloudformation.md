@@ -185,7 +185,7 @@ SNSのポリシーを反映。
 コードの更新をプッシュするとパイプラインが自動でスタートするため、ビルドまでの作業が効率的になった。
 デプロイステージなどを繋げて、様々なアプリケーションを作成できるように学習を進めていきたい。
 
-# CodeFamily Practicesの記事
+# 合わせて読みたい👀👉CodeFamily Practicesの記事
 
 :::details CodeCommitとローカル環境の連携 【CodeFamily Practices 1/7】
 https://zenn.dev/lifewithpiano/articles/codecommit_practice

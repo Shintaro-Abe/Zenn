@@ -149,7 +149,7 @@ https://github.com/Shintaro-Abe/codefamily-serverless/blob/50e7af970926837aceede
 サーバーレスに特化したフレームワークなので、CloudFormationやTerraformに比べて少ない記述で構築できるところが利点。
 アーキテクチャに合わせてフレームワークを活用したい。
 
-# CodeFamily Practicesの記事
+# 合わせて読みたい👀👉CodeFamily Practicesの記事
 
 :::details CodeCommitとローカル環境の連携 【CodeFamily Practices 1/7】
 https://zenn.dev/lifewithpiano/articles/codecommit_practice

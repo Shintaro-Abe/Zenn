@@ -224,7 +224,7 @@ cache:
 今回は基本的な使い方のみの習得。
 今後は単体テストやバッチビルドなどにトライし、CI/CDツールとして活用できるようにしたい。
 
-# CodeFamily Practicesの記事
+# 合わせて読みたい👀👉CodeFamily Practicesの記事
 
 :::details CodeCommitとローカル環境の連携 【CodeFamily Practices 1/7】
 https://zenn.dev/lifewithpiano/articles/codecommit_practice
