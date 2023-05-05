@@ -1,19 +1,24 @@
 ---
-title: "CodePipelineとCloudFormationで、API Gatewayをビルド【CodeFamily Practices 5/7】"
-emoji: "🐟"
+title: "CodePipelineとServerless Frameworkでビルド【CodeFamily Practices 6/7】"
+emoji: "🥽"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["aws", "codepipeline", "cloudformation", "cicd", "devops"]
-published: true
+topics: ["aws", "codepipeline", "serverlessframewor", "cicd", "devops"]
+published: false
 ---
 # 構成図
+
+:::message
+構成図は、Zennの記事「CodePipelineとCloudFormationで、API Gatewayをビルド【CodeFamily Practices 5/7】」とほぼ同じです。
+:::
+
 API GatewayとLambdaの挙動を確認するための、シンプルな構成。
 
 * ソースステージをCodeCommit、ビルドステージをCodeBuildに設定したCodePipelineを構築。
-* ビルドはCloudeFormation(SAM)を使用。
+* ビルドはServerless Frameworkを使用。
 * API Gatewayへメールのタイトルと本文を指定してアクセスをすると、SNSトピックのサブスクリプションへメールを送信
 * 送信に成功すると、サブジェクトとメッセージの値をレスポンス。
 
-![](/images/codefamily_cloudformation/api-cf.drawio.png =500x)
+![](/images/codefamily_serverless/api-serverless.drawio.png =500x)
 
 * __コマンド__
 オプション` -v `は、リクエストとレスポンスの詳細を返すために入力。
@@ -86,104 +91,63 @@ Subject: テスト Message: 動作異常なし。%
 ```
 __メール__
 
-![](/images/codefamily_cloudformation/apicf16.png =500x)
+![](/images/codefamily_serverless/apicf16.png =500x)
 
-# コード
+# 構築
+
 __対応するコードはGitHubに公開しています！__
 
-https://github.com/Shintaro-Abe/codefamily-cloudformation.git
+https://github.com/Shintaro-Abe/codefamily-serverless.git
 
-## Lambda
-SNSと連携し、サブスクリプションにメールを送るPythonソースコード。
+## プラグインの使用
+__Domain Managerプラグイン__ をインストールするコマンドが必要なため、デプロイと削除は以下の流れでコマンドを実行。
+API Gatewayに付与するカスタムドメインの作成に使用。
+
+* __インストールとドメイン作成__
+
+Domain Managerパッケージのインストール。
+
+```
+npm install serverless-domain-manager
+```
+ドメインの作成。
+
+```
+serverless create_domain
+```
+Serverless frameworkのデプロイ。
+
+```
+serverless deploy
+```
+* __リソースの削除__
+
+Serverless frameworkの削除。
+
+```
+serverless remove
+```
+ドメインの削除。
+
+```
+serverless delete_domain
+```
+* __buildspec.yml__
+
+https://github.com/Shintaro-Abe/codefamily-serverless/blob/50e7af970926837aceede9321aae6c7c5ff3e387/sources/buildspec.yml
+
+## コード
+* __serverless.yml__
+
+https://github.com/Shintaro-Abe/codefamily-serverless/blob/50e7af970926837aceede9321aae6c7c5ff3e387/sources/serverless.yml
 
 * __sns.py__
 
-https://github.com/Shintaro-Abe/codefamily-cloudformation/blob/9714081ca098bce9fe6ffb2c416013d46224cbe5/sources/sns.py
-
-## CloudFormation(SAM)
-
-* __api-sns.yml__
-
-https://github.com/Shintaro-Abe/codefamily-cloudformation/blob/9714081ca098bce9fe6ffb2c416013d46224cbe5/sources/api-sns.yml
-
-* __buildspec.yml__
-
-https://github.com/Shintaro-Abe/codefamily-cloudformation/blob/9714081ca098bce9fe6ffb2c416013d46224cbe5/sources/buildspec.yml
-
-## パイプラインの構築
-__ソースステージとビルドステージの二つを持つパイプラインを作成。__
-
-CodeCommitにリポジトリ(api-cloudformation)を作成し、ソースコードとbuildspec.ymlをプッシュ。
-
-![](/images/codefamily_cloudformation/apicf1.png =500x)
-
-CodeBuildへ移動し、以下の内容でビルドプロジェクトを作成。
-
-| 項目| 設定|
-| --- | --- |
-| ソースプロバイダ| CodeCommit|
-| リポジトリ| api-cloudformation |
-| Gitクローンの深さ | 1 (デフォルト) |
-| イメージ | aws/codebuild/amazonlinux2-x86_64-standard:4.0 |
-| 環境タイプ | Linux|
-| アーティファクト | なし |
-| キャッシュ | なし |
-| CloudWatch Logs | 有効 |
-
-![](/images/codefamily_cloudformation/apicf2.png =500x)
-
-CodePipelineへ移動し、パイプラインの設定を開始。
-
-![](/images/codefamily_cloudformation/apicf3.png =500x)
-
-前述で作成したリポジトリを指定。
-
-![](/images/codefamily_cloudformation/apicf4.png =500x)
-
-前述で作成したビルドプロジェクトを指定。
-
-![](/images/codefamily_cloudformation/apicf5.png =500x)
-
-デプロイを行わないためスキップ。
-
-![](/images/codefamily_cloudformation/apicf6.png =500x)
-
-設定内容を確認の上、「パイプラインを作成する」を選択。
-選択後、自動的にパイプラインを開始。
-
-![](/images/codefamily_cloudformation/apicf7.png =500x)
-
-##  自動構築
-ソース、ビルド両方のステージが成功。
-
-![](/images/codefamily_cloudformation/apicf8.png =500x)
-
-
-REST APIプロキシ統合のAPI Gatewayを作成。
-ホストゾーンにAレコードを生成し、カスタムドメインとして登録。
-
-![](/images/codefamily_cloudformation/apicf10.png =500x)
-
-Lambdaを作成。
-
-![](/images/codefamily_cloudformation/apicf12.png =500x)
-
-Cloudwatch Logsのポリシーを反映。
-この段階ではロググループは存在しないが、Lambdaを実行すると自動的に生成。
-
-![](/images/codefamily_cloudformation/apicf13.png =500x)
-
-SNSのポリシーを反映。
-
-![](/images/codefamily_cloudformation/apicf14.png =500x)
-
-トリガーにAPI Gatewayを設定。
-
-![](/images/codefamily_cloudformation/apicf15.png =500x)
+https://github.com/Shintaro-Abe/codefamily-serverless/blob/50e7af970926837aceede9321aae6c7c5ff3e387/sources/sns.py
 
 # まとめ
-コードの更新をプッシュするとパイプラインが自動でスタートするため、ビルドまでの作業が効率的になった。
-デプロイステージなどを繋げて、様々なアプリケーションを作成できるように学習を進めていきたい。
+サーバーレスに特化したフレームワークなので、CloudFormationやTerraformに比べて少ない記述で構築できるところが利点。
+アーキテクチャに合わせてフレームワークを活用したい。
 
 # CodeFamily Practicesの記事
 
@@ -201,4 +165,8 @@ https://zenn.dev/lifewithpiano/articles/codedeploy_practice
 
 :::details CodePipelineでシンプルなパイプラインを構築してみた 【CodeFamily Practices 4/7】
 https://zenn.dev/lifewithpiano/articles/codepipeline_practice
+:::
+
+:::details CodePipelineとCloudformationで、API Gatewayをビルド【CodeFamily Practices 5/7】
+https://zenn.dev/lifewithpiano/articles/codefamily_cloudformation
 :::

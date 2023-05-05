@@ -242,3 +242,21 @@ CodePipelineへ移動。
 シンプルなパイプラインの構築と、追加・削除を実践。
 サードパーティのツールと組み合わせて使用したり、パイプライン自体をInfrastructure as Codeで構築してみるなど、課題はまだ多い。
 構築系のハンズオンと併用して、習得していきたい。
+
+# CodeFamily Practicesの記事
+
+:::details CodeCommitとローカル環境の連携 【CodeFamily Practices 1/7】
+https://zenn.dev/lifewithpiano/articles/codecommit_practice
+:::
+
+:::details CodeBuildでビルドプロジェクトを作ってみよう 【CodeFamily Practices 2/7】
+https://zenn.dev/lifewithpiano/articles/codebuild_practice
+:::
+
+:::details CodeDeployでEC2にアプリケーションをデプロイ 【CodeFamily Practices 3/7】
+https://zenn.dev/lifewithpiano/articles/codedeploy_practice
+:::
+
+:::details CodePipelineとCloudformationで、API Gatewayをビルド【CodeFamily Practices 5/7】
+https://zenn.dev/lifewithpiano/articles/codefamily_cloudformation
+:::

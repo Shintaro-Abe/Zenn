@@ -318,3 +318,21 @@ EC2へアクセスし、アプリケーションのインストールを確認�
 # まとめ
 EC2へアプリケーションをインストールする、シンプルなデプロイを習得。
 appspec.ymlについて掘り下げなかったので、LambdaやECSのデプロイ時にライフサイクルイベントなどをトライしてみたい。
+
+# CodeFamily Practicesの記事
+
+:::details CodeCommitとローカル環境の連携 【CodeFamily Practices 1/7】
+https://zenn.dev/lifewithpiano/articles/codecommit_practice
+:::
+
+:::details CodeBuildでビルドプロジェクトを作ってみよう 【CodeFamily Practices 2/7】
+https://zenn.dev/lifewithpiano/articles/codebuild_practice
+:::
+
+:::details CodePipelineでシンプルなパイプラインを構築してみた 【CodeFamily Practices 4/7】
+https://zenn.dev/lifewithpiano/articles/codepipeline_practice
+:::
+
+:::details CodePipelineとCloudformationで、API Gatewayをビルド【CodeFamily Practices 5/7】
+https://zenn.dev/lifewithpiano/articles/codefamily_cloudformation
+:::

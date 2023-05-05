@@ -223,3 +223,21 @@ cache:
 # まとめ
 今回は基本的な使い方のみの習得。
 今後は単体テストやバッチビルドなどにトライし、CI/CDツールとして活用できるようにしたい。
+
+# CodeFamily Practicesの記事
+
+:::details CodeCommitとローカル環境の連携 【CodeFamily Practices 1/7】
+https://zenn.dev/lifewithpiano/articles/codecommit_practice
+:::
+
+:::details CodeDeployでEC2にアプリケーションをデプロイ 【CodeFamily Practices 3/7】
+https://zenn.dev/lifewithpiano/articles/codedeploy_practice
+:::
+
+:::details CodePipelineでシンプルなパイプラインを構築してみた 【CodeFamily Practices 4/7】
+https://zenn.dev/lifewithpiano/articles/codepipeline_practice
+:::
+
+:::details CodePipelineとCloudformationで、API Gatewayをビルド【CodeFamily Practices 5/7】
+https://zenn.dev/lifewithpiano/articles/codefamily_cloudformation
+:::

@@ -296,3 +296,21 @@ Your branch is up to date with 'origin/main'.
 # まとめ
 CI/CDのプロセスでリポジトリの役割を担うCodeCommit。
 今回はVSCodeからのpushを行ったが、Cloud9との連携も試して各ツールの利点などを掘り下げていきたい。
+
+# CodeFamily Practicesの記事
+
+:::details CodeBuildでビルドプロジェクトを作ってみよう 【CodeFamily Practices 2/7】
+https://zenn.dev/lifewithpiano/articles/codebuild_practice
+:::
+
+:::details CodeDeployでEC2にアプリケーションをデプロイ 【CodeFamily Practices 3/7】
+https://zenn.dev/lifewithpiano/articles/codedeploy_practice
+:::
+
+:::details CodePipelineでシンプルなパイプラインを構築してみた 【CodeFamily Practices 4/7】
+https://zenn.dev/lifewithpiano/articles/codepipeline_practice
+:::
+
+:::details CodePipelineとCloudformationで、API Gatewayをビルド【CodeFamily Practices 5/7】
+https://zenn.dev/lifewithpiano/articles/codefamily_cloudformation
+:::
