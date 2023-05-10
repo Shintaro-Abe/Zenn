@@ -1,5 +1,5 @@
 ---
-title: "CodePipelineとTerraformで、API Gatewayをビルド【CodeFamily Practices 5/7】"
+title: "CodePipelineとTerraformで、API Gatewayをビルド【CodeFamily Practices 7/7】"
 emoji: "📡"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["aws", "codepipeline", "cloudformation", "cicd", "devops"]
@@ -97,7 +97,7 @@ __メール__
 
 __対応するコードはGitHubに公開しています！__
 
-https://github.com/Shintaro-Abe/codefamily-serverless.git
+https://github.com/Shintaro-Abe/codefamily-terraform.git
 
 * __buildspec.yml__
 
