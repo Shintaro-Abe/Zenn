@@ -14,11 +14,11 @@ published: false
 API GatewayとLambdaの挙動を確認するための、シンプルな構成。
 
 * ソースステージをCodeCommit、ビルドステージをCodeBuildに設定したCodePipelineを構築。
-* ビルドはServerless Frameworkを使用。
+* ビルドはTerraformを使用。
 * API Gatewayへメールのタイトルと本文を指定してアクセスをすると、SNSトピックのサブスクリプションへメールを送信
 * 送信に成功すると、サブジェクトとメッセージの値をレスポンス。
 
-![](/images/codefamily_serverless/api-serverless.drawio.png =500x)
+![](/images/codefamily_terraform/api-terra.drawio.png =500x)
 
 * __コマンド__
 オプション` -v `は、リクエストとレスポンスの詳細を返すために入力。
@@ -91,379 +91,70 @@ Subject: テスト Message: 動作異常なし。%
 ```
 __メール__
 
-![](/images/codefamily_serverless/apicf16.png =500x)
+![](/images/codefamily_terraform/apicf16.png =500x)
 
-# 構築
+# コード
+
+__対応するコードはGitHubに公開しています！__
+
+https://github.com/Shintaro-Abe/codefamily-serverless.git
+
 * __buildspec.yml__
 
-```
-version: 0.2
-
-env:
-  secrets-manager:
-    AWS_ACCESS_KEY_ID: access
-    AWS_SECRET_ACCESS_KEY: secret
-
-phases:
-  install:
-    commands:
-      - yum install -y yum-utils shadow-utils
-      - yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
-      - yum -y install terraform
-  build:
-    commands:
-      - echo $AWS_ACCESS_KEY_ID
-      - echo $AWS_SECRET_ACCESS_KEY
-      - terraform init
-      - terraform apply -auto-approve 
-```
+https://github.com/Shintaro-Abe/codefamily-terraform/blob/df6ca7c46c8ff90479d6aab9951b58ab384b8c21/sources/buildspec.yml
 
 * __providers.tf__
 
-```
-provider "aws" {
-  region = "ap-northeast-1"
-}
-```
+https://github.com/Shintaro-Abe/codefamily-terraform/blob/df6ca7c46c8ff90479d6aab9951b58ab384b8c21/sources/providers.tf
+
 * __backend.tf__
 
-```
-terraform {
-  backend "s3" {
-    bucket = "abetest-terraform-deploymentbucket"
-    key    = "abetest-dev/terraform.tfstate"
-		encrypt = true
-    region = "ap-northeast-1"
-  }
-}
-```
+https://github.com/Shintaro-Abe/codefamily-terraform/blob/df6ca7c46c8ff90479d6aab9951b58ab384b8c21/sources/backend.tf
+
 * __variables.tf__
 
-```
-#Eメールアドレス
-variable "subscription_address" {
-  type    = string
-  default = "colorfulrhythms927@icloud.com"
-}
+https://github.com/Shintaro-Abe/codefamily-terraform/blob/df6ca7c46c8ff90479d6aab9951b58ab384b8c21/sources/variables.tf
 
-#Topicのリソースネーム
-variable "topic_name" {
-  type    = string
-  default = "Api-Notification"
-}
-
-#Lambdaのリソースネーム
-variable "lambda_name" {
-  type    = string
-  default = "Api-Lambda-Terraform"
-}
-
-#ACMの識別子
-variable "certificate_identifer" {
-  type    = string
-  default = "be64a90c-f218-4d3a-aca0-56e9c8246020"
-}
-```
 * __data.tf__
 
-```
-data "aws_region" "current" {}
-locals{
-  region = data.aws_region.current.name
-}
-output "region" {
-  value = local.region
-}
-
-data "aws_caller_identity" "current" {}
-locals{
-  account_id = data.aws_caller_identity.current.account_id
-}
-output "account_id" {
-  value = local.account_id
-}
-data "archive_file" "lambda" {
-  type        = "zip"
-  source_file = "sns.py"
-  output_path = "sns.zip"
-}
-
-#Lambdaの実行ロールにアタッチするポリシー
-data "aws_iam_policy_document" "lambda-logging" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents"
-    ]
-    resources = [ "arn:aws:logs:${local.region}:${local.account_id}:log-group:/aws/lambda/${var.lambda_name}:*" ]
-  }
-}
-
-data "aws_iam_policy_document" "lambda-sns" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "sns:Publish"
-    ]
-    resources = [ "arn:aws:sns:${local.region}:${local.account_id}:${var.topic_name}" ]
-  }
-}
-
-data "aws_iam_policy_document" "lambda-assume-role" {
-  statement {
-    actions = [ "sts:AssumeRole" ]
-    principals {
-      type = "Service"
-      identifiers = [ "lambda.amazonaws.com" ]
-    }
-  }
-}
-```
-
+https://github.com/Shintaro-Abe/codefamily-terraform/blob/df6ca7c46c8ff90479d6aab9951b58ab384b8c21/sources/data.tf
 
 * __main.tf__
 
-```
-#Lambdaモニタリングのポリシー作成
-resource "aws_iam_policy" "lambda-logging" {
-  name = "lambda-logging"
-  path = "/"
-  policy = data.aws_iam_policy_document.lambda-logging.json
-}
-
-#LambdaのSNSポリシー作成
-resource "aws_iam_policy" "lambda-sns" {
-  name = "lambda-sns"
-  path = "/"
-  policy = data.aws_iam_policy_document.lambda-sns.json
-}
-
-#Lambdaの実行ロール作成
-
-resource "aws_iam_role" "lambda-role" {
-  name = "api-sns"
-  assume_role_policy = data.aws_iam_policy_document.lambda-assume-role.json
-  managed_policy_arns = [aws_iam_policy.lambda-logging.arn, aws_iam_policy.lambda-sns.arn]
-}
-
-#SNSの作成
-resource "aws_sns_topic" "cost_sns" {
-  name = var.topic_name
-  display_name = "Notification"
-}
-
-resource "aws_sns_topic_subscription" "subscription" {
-  topic_arn = aws_sns_topic.cost_sns.arn
-  protocol = "email"
-  endpoint = var.subscription_address
-}
-
-#API Gatewayの作成
-resource "aws_api_gateway_rest_api" "tfsns-api" {
-  name = "api-sns"
-  endpoint_configuration {
-    types = [ "REGIONAL" ]
-  }
-}
-
-resource "aws_api_gateway_method" "tfsns-method" {
-  rest_api_id = aws_api_gateway_rest_api.tfsns-api.id
-  resource_id = aws_api_gateway_rest_api.tfsns-api.root_resource_id
-  http_method = "ANY"
-  authorization = "NONE"
-}
-
-resource "aws_api_gateway_integration" "tfsns-integration" {
-  rest_api_id = aws_api_gateway_rest_api.tfsns-api.id
-  resource_id = aws_api_gateway_rest_api.tfsns-api.root_resource_id
-  http_method = aws_api_gateway_method.tfsns-method.http_method
-  integration_http_method = "ANY"
-  type = "AWS_PROXY"
-  uri = aws_lambda_function.tfsns-lambda.invoke_arn
-}
-
-resource "aws_lambda_permission" "apigw_lambda" {
-  statement_id = "AllowExecutionFromAPIGateway"
-  action = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.tfsns-lambda.function_name
-  principal = "apigateway.amazonaws.com"
-  source_arn = "arn:aws:execute-api:${local.region}:${local.account_id}:${aws_api_gateway_rest_api.tfsns-api.id}/*/*"
-}
-
-#Lambdaの作成
-resource "aws_lambda_function" "tfsns-lambda" {
-  function_name = var.lambda_name
-  filename = "sns.zip"
-  role = aws_iam_role.lambda-role.arn
-  handler = "sns.handler"
-  runtime = "python3.9"
-  environment {
-    variables = {
-      topic: "arn:aws:sns:${local.region}:${local.account_id}:${var.topic_name}"
-    }
-  }
-}
-
-#API Gatewayのデプロイ
-resource "aws_api_gateway_deployment" "tfsns-deploy" {
-  depends_on = [
-    aws_api_gateway_method.tfsns-method, aws_api_gateway_integration.tfsns-integration
-  ]
-  rest_api_id = aws_api_gateway_rest_api.tfsns-api.id
-  stage_name = "prod"
-}
-
-#カスタムドメインの作成
-resource "aws_api_gateway_domain_name" "tfsns-domain" {
-  domain_name = "sns.shintaro-abe-personal.click"
-  regional_certificate_arn = "arn:aws:acm:${local.region}:${local.account_id}:certificate/${var.certificate_identifer}"
-  endpoint_configuration {
-    types = [ "REGIONAL" ]
-  }
-}
-
-resource "aws_route53_record" "tfsns-record" {
-  name = aws_api_gateway_domain_name.tfsns-domain.domain_name
-  type = "A"
-  zone_id = "Z08412181CCQ5G40PSDXA"
-
-  alias {
-    evaluate_target_health = true
-    name = aws_api_gateway_domain_name.tfsns-domain.regional_domain_name
-    zone_id = aws_api_gateway_domain_name.tfsns-domain.regional_zone_id
-  }
-}
-
-resource "aws_api_gateway_base_path_mapping" "domain-mapping" {
-  api_id = aws_api_gateway_rest_api.tfsns-api.id
-  stage_name = aws_api_gateway_deployment.tfsns-deploy.stage_name
-  domain_name = aws_api_gateway_domain_name.tfsns-domain.domain_name
-}
-```
+https://github.com/Shintaro-Abe/codefamily-terraform/blob/df6ca7c46c8ff90479d6aab9951b58ab384b8c21/sources/main.tf
 
 * __main.tf(リソースパスあり)__
 
-```
-#Lambdaモニタリングのポリシー作成
-resource "aws_iam_policy" "lambda-logging" {
-  name = "lambda-logging"
-  path = "/"
-  policy = data.aws_iam_policy_document.lambda-logging.json
-}
+https://github.com/Shintaro-Abe/codefamily-terraform/blob/df6ca7c46c8ff90479d6aab9951b58ab384b8c21/sources/main_IncludesResourcePath.tf
 
-#LambdaのSNSポリシー作成
-resource "aws_iam_policy" "lambda-sns" {
-  name = "lambda-sns"
-  path = "/"
-  policy = data.aws_iam_policy_document.lambda-sns.json
-}
+## 合わせて読みたい👀👉CodeFamily Practicesの記事
 
-#Lambdaの実行ロール作成
-resource "aws_iam_role" "lambda-role" {
-  name = "api-sns"
-  assume_role_policy = data.aws_iam_policy_document.lambda-assume-role.json
-  managed_policy_arns = [aws_iam_policy.lambda-logging.arn, aws_iam_policy.lambda-sns.arn]
-}
+:::details CodeCommitとローカル環境の連携 【CodeFamily Practices 1/7】
+https://zenn.dev/lifewithpiano/articles/codecommit_practice
+:::
 
-#SNSの作成。
-resource "aws_sns_topic" "cost_sns" {
-  name = var.topic_name
-  display_name = "Notification"
-}
+:::details CodeBuildでビルドプロジェクトを作ってみよう 【CodeFamily Practices 2/7】
+https://zenn.dev/lifewithpiano/articles/codebuild_practice
+:::
 
-resource "aws_sns_topic_subscription" "subscription" {
-  topic_arn = aws_sns_topic.cost_sns.arn
-  protocol = "email"
-  endpoint = var.subscription_address
-}
+:::details CodeDeployでEC2にアプリケーションをデプロイ 【CodeFamily Practices 3/7】
+https://zenn.dev/lifewithpiano/articles/codedeploy_practice
+:::
 
-#ApiGatewayの作成
-resource "aws_api_gateway_rest_api" "tfsns-api" {
-  name = "api-sns"
-  endpoint_configuration {
-    types = [ "REGIONAL" ]
-  }
-}
+:::details CodePipelineでシンプルなパイプラインを構築してみた 【CodeFamily Practices 4/7】
+https://zenn.dev/lifewithpiano/articles/codepipeline_practice
+:::
 
-resource "aws_api_gateway_resource" "tfsns-resouce" {
-  path_part = "sns"
-  parent_id = aws_api_gateway_rest_api.tfsns-api.root_resource_id
-  rest_api_id = aws_api_gateway_rest_api.tfsns-api.id  
-}
+:::details CodePipelineとCloudformationで、API Gatewayをビルド【CodeFamily Practices 5/7】
+https://zenn.dev/lifewithpiano/articles/codefamily_serverless
+:::
 
-resource "aws_api_gateway_method" "tfsns-method" {
-  rest_api_id = aws_api_gateway_rest_api.tfsns-api.id
-  resource_id = aws_api_gateway_resource.tfsns-resouce.id
-  http_method = "ANY"
-  authorization = "NONE"
-}
+:::details CodePipelineとServerless Frameworkでビルド【CodeFamily Practices 6/7】
+https://zenn.dev/lifewithpiano/articles/codefamily_serverless
+:::
 
-resource "aws_api_gateway_integration" "tfsns-integration" {
-  rest_api_id = aws_api_gateway_rest_api.tfsns-api.id
-  resource_id = aws_api_gateway_resource.tfsns-resouce.id
-  http_method = aws_api_gateway_method.tfsns-method.http_method
-  integration_http_method = "ANY"
-  type = "AWS_PROXY"
-  uri = aws_lambda_function.tfsns-lambda.invoke_arn
-}
+## 👀👉Terraform関連の記事
 
-resource "aws_lambda_permission" "apigw_lambda" {
-  statement_id = "AllowExecutionFromAPIGateway"
-  action = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.tfsns-lambda.function_name
-  principal = "apigateway.amazonaws.com"
-  source_arn = "arn:aws:execute-api:${local.region}:${local.account_id}:${aws_api_gateway_rest_api.tfsns-api.id}/*/${aws_api_gateway_method.tfsns-method.http_method}${aws_api_gateway_resource.tfsns-resouce.path}"
-}
-
-#Lambdaの作成
-resource "aws_lambda_function" "tfsns-lambda" {
-  function_name = var.lambda_name
-  filename = "sns.zip"
-  role = aws_iam_role.lambda-role.arn
-  handler = "sns.handler"
-  runtime = "python3.9"
-  environment {
-    variables = {
-      topic: "arn:aws:sns:${local.region}:${local.account_id}:${var.topic_name}"
-    }
-  }
-}
-
-#ApiGatewayのデプロイ
-resource "aws_api_gateway_deployment" "tfsns-deploy" {
-  depends_on = [
-    aws_api_gateway_method.tfsns-method, aws_api_gateway_integration.tfsns-integration
-  ]
-  rest_api_id = aws_api_gateway_rest_api.tfsns-api.id
-  stage_name = "prod"
-}
-
-#カスタムドメインの設定
-resource "aws_api_gateway_domain_name" "tfsns-domain" {
-  domain_name = "sns.shintaro-abe-personal.click"
-  regional_certificate_arn = "arn:aws:acm:${local.region}:${local.account_id}:certificate/${var.certificate_identifer}"
-  endpoint_configuration {
-    types = [ "REGIONAL" ]
-  }
-}
-
-resource "aws_route53_record" "tfsns-record" {
-  name = aws_api_gateway_domain_name.tfsns-domain.domain_name
-  type = "A"
-  zone_id = "Z08412181CCQ5G40PSDXA"
-
-  alias {
-    evaluate_target_health = true
-    name = aws_api_gateway_domain_name.tfsns-domain.regional_domain_name
-    zone_id = aws_api_gateway_domain_name.tfsns-domain.regional_zone_id
-  }
-}
-
-resource "aws_api_gateway_base_path_mapping" "domain-mapping" {
-  api_id = aws_api_gateway_rest_api.tfsns-api.id
-  stage_name = aws_api_gateway_deployment.tfsns-deploy.stage_name
-  domain_name = aws_api_gateway_domain_name.tfsns-domain.domain_name
-}
-```
+:::details Terraformの基本的な使い方
+https://zenn.dev/lifewithpiano/articles/terraform_practice2304
+:::
