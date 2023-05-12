@@ -3,7 +3,7 @@ title: "CodePipelineとTerraformで、API Gatewayをビルド【CodeFamily Pract
 emoji: "📡"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["aws", "codepipeline", "cloudformation", "cicd", "devops"]
-published: false
+published: true
 ---
 # 構成図
 
@@ -103,7 +103,7 @@ https://github.com/Shintaro-Abe/codefamily-terraform.git
 * __buildspec.yml__
 ビルドに必要なポリシーを付与したCodeBuildのサービスロールを使用の場合。
 
-https://github.com/Shintaro-Abe/codefamily-terraform/blob/df6ca7c46c8ff90479d6aab9951b58ab384b8c21/sources/buildspec.yml
+https://github.com/Shintaro-Abe/codefamily-terraform/blob/b2ed8dde23c4974ce8f2e725f5e3eeb493da168e/sources/buildspec.yml
 
 * __buildspec.yml(アクセスキーID・シークレットキー使用)__
 アクセスキーID、シークレットキーを使用する場合。
@@ -150,18 +150,17 @@ https://github.com/Shintaro-Abe/codefamily-terraform/blob/df6ca7c46c8ff90479d6aa
 
 * __main.tf__
 
-https://github.com/Shintaro-Abe/codefamily-terraform/blob/df6ca7c46c8ff90479d6aab9951b58ab384b8c21/sources/main.tf
+https://github.com/Shintaro-Abe/codefamily-terraform/blob/38911b4a756ef8727a8c97064d0ae25390ba17c5/sources/main.tf
 
 * __main.tf(リソースパスあり)__
 
-https://github.com/Shintaro-Abe/codefamily-terraform/blob/df6ca7c46c8ff90479d6aab9951b58ab384b8c21/sources/main_IncludesResourcePath.tf
-
+https://github.com/Shintaro-Abe/codefamily-terraform/blob/32b47534b63f73b36469924b3199b56cbe88b286/sources/main_IncludesResourcePath.tf
 ## パイプラインの構築
 __ソースステージとビルドステージの二つを持つパイプラインを作成。__
 
-CodeCommitにリポジトリ(api-serverless)を作成し、ソースコードとbuildspec.ymlをプッシュ。
+CodeCommitにリポジトリ(api-terraform)を作成し、ソースコードとbuildspec.ymlをプッシュ。
 
-![](/images/codefamily_terraform/apiserver1.png =500x)
+![](/images/codefamily_terraform/apiterra1.png =500x)
 
 CodeBuildへ移動し、以下の内容でビルドプロジェクトを作成。
 
@@ -176,79 +175,79 @@ CodeBuildへ移動し、以下の内容でビルドプロジェクトを作成�
 | Cache | No cache |
 | CloudWatch Logs | ENABLED |
 
-![](/images/codefamily_terraform/apiserver2.png =500x)
+![](/images/codefamily_terraform/apiterra2.png =500x)
 
 CodePipelineへ移動し、パイプラインの設定を開始。
 
-![](/images/codefamily_terraform/apiserver3.png =500x)
+![](/images/codefamily_terraform/apiterra3.png =500x)
 
 前述で作成したリポジトリを指定。
 
-![](/images/codefamily_terraform/apiserver4.png =500x)
+![](/images/codefamily_terraform/apiterra4.png =500x)
 
 前述で作成したビルドプロジェクトを指定。
 
-![](/images/codefamily_terraform/apiserver5.png =500x)
+![](/images/codefamily_terraform/apiterra5.png =500x)
 
 デプロイを行わないためスキップ。
 
-![](/images/codefamily_terraform/apiserver6.png =500x)
+![](/images/codefamily_terraform/apiterra6.png =500x)
 
 設定内容を確認の上、"Create pipeline"を選択。
 選択後、自動的にパイプラインを開始。
 
-![](/images/codefamily_terraform/apiserver7.png =500x)
+![](/images/codefamily_terraform/apiterra7.png =500x)
 
 ##  自動構築
 SourceとBuild、両方のステージが成功。
 
-![](/images/codefamily_terraform/apiserver8.png =500x)
+![](/images/codefamily_terraform/apiterra8.png =500x)
 
 CodeBuildのログを確認。
 Amazon Linux2のDockerイメージを使用したコンテナで、CodeCommitからダウンロードしたBuildspec.ymlを参照。
-Serverless FrameworkとDomain Managerをインストールし、リソースをデプロイ。
+Terraformをインストールし、リソースをデプロイ。
 
-![](/images/codefamily_terraform/apiserver9.png =500x)
+![](/images/codefamily_terraform/apiterra9.png =500x)
 
-Domain Managerは、ホストゾーンにデフォルトでAレコードとAAAAレコードを生成。
+Domain Managerは、ホストゾーンにデフォルトでAレコードを生成。
 
-![](/images/codefamily_terraform/apiserver10.png =500x)
+![](/images/codefamily_terraform/apiterra10.png =500x)
 
 REST APIプロキシ統合のAPI Gatewayを作成。
 
-![](/images/codefamily_terraform/apiserver11.png =500x)
+![](/images/codefamily_terraform/apiterra11.png =500x)
 
 カスタムドメインとして登録。
 
-![](/images/codefamily_terraform/apiserver12.png =500x)
+![](/images/codefamily_terraform/apiterra12.png =500x)
 
 Lambdaを作成。
 
-![](/images/codefamily_terraform/apiserver13.png =500x)
+![](/images/codefamily_terraform/apiterra13.png =500x)
 
 Cloudwatch Logsのポリシーを反映。
 
-![](/images/codefamily_terraform/apiserver14.png =500x)
+![](/images/codefamily_terraform/apiterra14.png =500x)
 
 CloudWatch Logsにロググループを作成。
 
-![](/images/codefamily_terraform/apiserver17.png =500x)
+![](/images/codefamily_terraform/apiterra15.png =500x)
 
 SNSのポリシーを反映。
 
-![](/images/codefamily_terraform/apiserver15.png =500x)
+![](/images/codefamily_terraform/apiterra16.png =500x)
 
 トリガーにAPI Gatewayを設定。
 
-![](/images/codefamily_terraform/apiserver16.png =500x)
+![](/images/codefamily_terraform/apiterra17.png =500x)
 
 SNSにトピックを作成。エンドポイントは、サブスクリプションの確認メールで承認の必要あり。
 
-![](/images/codefamily_terraform/apiserver18.png =500x)
+![](/images/codefamily_terraform/apiterra18.png =500x)
 
 # まとめ
-サーバーレスに特化したフレームワークなので、CloudFormationやTerraformに比べて少ない記述で構築できるところが利点。
-アーキテクチャに合わせてフレームワークを活用したい。
+今回はコンソールを使用してビルドプロジェクトやパイプラインを作成。
+今後はパイプライン自体をTerraformで作成し、再利用を行いたい。
 
 ## 合わせて読みたい👀👉CodeFamily Practicesの記事
 
