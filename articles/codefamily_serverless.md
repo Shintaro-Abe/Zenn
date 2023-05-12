@@ -137,7 +137,7 @@ https://github.com/Shintaro-Abe/codefamily-serverless.git
 
 * __buildspec.yml__
 
-https://github.com/Shintaro-Abe/codefamily-serverless/blob/50e7af970926837aceede9321aae6c7c5ff3e387/sources/buildspec.yml
+https://github.com/Shintaro-Abe/codefamily-serverless/blob/6815d56b348d2fc5ffdc32ba87fab08e3deb38c9/sources/buildspec.yml
 
 * __serverless.yml__
 
@@ -145,7 +145,7 @@ https://github.com/Shintaro-Abe/codefamily-serverless/blob/6815d56b348d2fc5ffdc3
 
 * __sns.py__
 
-https://github.com/Shintaro-Abe/codefamily-serverless/blob/50e7af970926837aceede9321aae6c7c5ff3e387/sources/sns.py
+https://github.com/Shintaro-Abe/codefamily-serverless/blob/6815d56b348d2fc5ffdc32ba87fab08e3deb38c9/sources/sns.py
 
 ## パイプラインの構築
 __ソースステージとビルドステージの二つを持つパイプラインを作成。__

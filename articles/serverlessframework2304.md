@@ -230,18 +230,18 @@ __自動で付与されるポリシー__
 | Lambda |logs:CreateLogStream<br>logs:CreateLogGroup<br>logs:TagResource<br>logs:PutLogEvents|
 | StepFunctions | 実行に必要なポリシー。 |
 
-https://github.com/Shintaro-Abe/serverless-practice/blob/47dfbd68b7bd90a9e747247f42dfe6864e6213fe/sources/serverless-part1.yml
+https://github.com/Shintaro-Abe/serverless-practice/blob/37871ad2b5a40a1a8a2db5ce4bc9848082da338b/sources/serverless-part1.yml
 
 #### serverless.yml 【part.2】
 
 LambdaとStepFunctions以外のリソースをresourceセクションで作成。
 
-https://github.com/Shintaro-Abe/serverless-practice/blob/47dfbd68b7bd90a9e747247f42dfe6864e6213fe/sources/serverless-part2.yml
+https://github.com/Shintaro-Abe/serverless-practice/blob/37871ad2b5a40a1a8a2db5ce4bc9848082da338b/sources/serverless-part2.yml
 
 #### cost.py
 [Developers IO 藤井元貴さん作成のapp.py](https://dev.classmethod.jp/articles/notify-slack-aws-billing/)を参考にさせていただきました。
 
-https://github.com/Shintaro-Abe/serverless-practice/blob/47dfbd68b7bd90a9e747247f42dfe6864e6213fe/sources/cost.py
+https://github.com/Shintaro-Abe/serverless-practice/blob/37871ad2b5a40a1a8a2db5ce4bc9848082da338b/sources/cost.py
 
 # まとめ
 LambdaやStepFunctionsはServerless Frameworkで定義すると、ロールやトリガーなどの管理がしやすい。

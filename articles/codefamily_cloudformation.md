@@ -98,17 +98,17 @@ SNSと連携し、サブスクリプションにメールを送るPythonソー�
 
 * __sns.py__
 
-https://github.com/Shintaro-Abe/codefamily-cloudformation/blob/9714081ca098bce9fe6ffb2c416013d46224cbe5/sources/sns.py
+https://github.com/Shintaro-Abe/codefamily-cloudformation/blob/b919371e2b1342170061f20d214146cbc8671ada/sources/sns.py
 
 ## CloudFormation(SAM)
 
 * __api-sns.yml__
 
-https://github.com/Shintaro-Abe/codefamily-cloudformation/blob/9714081ca098bce9fe6ffb2c416013d46224cbe5/sources/api-sns.yml
+https://github.com/Shintaro-Abe/codefamily-cloudformation/blob/b919371e2b1342170061f20d214146cbc8671ada/sources/api-sns.yml
 
 * __buildspec.yml__
 
-https://github.com/Shintaro-Abe/codefamily-cloudformation/blob/9714081ca098bce9fe6ffb2c416013d46224cbe5/sources/buildspec.yml
+https://github.com/Shintaro-Abe/codefamily-cloudformation/blob/b919371e2b1342170061f20d214146cbc8671ada/sources/buildspec.yml
 
 ## パイプラインの構築
 __ソースステージとビルドステージの二つを持つパイプラインを作成。__

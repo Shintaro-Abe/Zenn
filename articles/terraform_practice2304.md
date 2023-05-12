@@ -377,6 +377,12 @@ https://github.com/Shintaro-Abe/terraform-practice/blob/7089a58c5602a07ba54e7f94
 
 https://github.com/Shintaro-Abe/terraform-practice/blob/7089a58c5602a07ba54e7f9428c0edef5f4514a8/sources/main.tf
 
+* __cost.py__
+
+[Developers IO 藤井元貴さん作成のapp.py](https://dev.classmethod.jp/articles/notify-slack-aws-billing/)を参考にさせていただきました。
+
+https://github.com/Shintaro-Abe/terraform-practice/blob/7089a58c5602a07ba54e7f9428c0edef5f4514a8/sources/cost.py
+
 # まとめ
 定義する内容ごとにtfファイルを作成できるため、工夫次第でとても運用しやすくなる。
 構築できるだけで良しとせず、継続して使用する場合のクオリティを求めてブラッシュアップを重ねたい。
