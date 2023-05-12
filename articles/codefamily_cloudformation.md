@@ -202,3 +202,11 @@ https://zenn.dev/lifewithpiano/articles/codedeploy_practice
 :::details CodePipelineでシンプルなパイプラインを構築してみた 【CodeFamily Practices 4/7】
 https://zenn.dev/lifewithpiano/articles/codepipeline_practice
 :::
+
+:::details CodePipelineとServerless Frameworkでビルド【CodeFamily Practices 6/7】
+https://zenn.dev/lifewithpiano/articles/codefamily_serverless
+:::
+
+:::details CodePipelineとTerraformで、API Gatewayをビルド【CodeFamily Practices 7/7】
+https://zenn.dev/lifewithpiano/articles/codefamily_terraform
+:::

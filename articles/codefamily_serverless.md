@@ -263,6 +263,10 @@ https://zenn.dev/lifewithpiano/articles/codepipeline_practice
 https://zenn.dev/lifewithpiano/articles/codefamily_serverless
 :::
 
+:::details CodePipelineとTerraformで、API Gatewayをビルド【CodeFamily Practices 7/7】
+https://zenn.dev/lifewithpiano/articles/codefamily_terraform
+:::
+
 ## 👀👉Serverless Framework関連の記事
 
 :::details Serverless Frameworkの基本的な使い方
